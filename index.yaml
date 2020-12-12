@@ -1,5 +1,16 @@
 apiVersion: v1
 entries:
+  cadvisor:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2020-12-12T19:47:08.928839787Z"
+    description: A Helm chart for Kubernetes
+    digest: e45b6ab60162ee5191f58472d87e8e653468cc9856a16b8614cbbdd73f276996
+    name: cadvisor
+    type: application
+    urls:
+    - https://github.com/clouddrove/helmcharts/releases/download/cadvisor-0.1.1/cadvisor-0.1.1.tgz
+    version: 0.1.1
   metrics-server:
   - apiVersion: v2
     appVersion: 1.16.1
