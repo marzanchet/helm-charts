@@ -5,7 +5,7 @@
 You can access these charts by adding the clouddrove Helm Repo to your client:
 
 ```bash
-$ helm repo add clouddrove https://helmcharts.clouddrove.com
+$ helm repo add clouddrove https://charts.clouddrove.com
 ```
 
 Then, you can access any of the charts under the `clouddrove` name. For example, you can find all the clouddrove charts by
