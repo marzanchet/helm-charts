@@ -9,7 +9,7 @@ $ helm repo add clouddrove https://helmcharts.clouddrove.com
 ```
 
 Then, you can access any of the charts under the `clouddrove` name. For example, you can find all the clouddrove charts by
-searching for `clouddrove`:
+searching for `clouddrove`
 
 ```bash
 $ helm search clouddrove
