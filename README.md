@@ -12,5 +12,5 @@ Then, you can access any of the charts under the `clouddrove` name. For example,
 searching for `clouddrove`
 
 ```bash
-$ helm search clouddrove
+$ helm search repo clouddrove
 ```
