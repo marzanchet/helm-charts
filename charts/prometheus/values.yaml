@@ -1,3 +1,4 @@
+###### Global ####
 kubernetesendpoint:
 secretName:
 ######################## RBAC for prometheus #################################
