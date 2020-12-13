@@ -22,4 +22,22 @@ entries:
     urls:
     - https://github.com/clouddrove/helmcharts/releases/download/metrics-server-0.1.1/metrics-server-0.1.1.tgz
     version: 0.1.1
+  prometheus:
+  - apiVersion: v1
+    appVersion: 2.13.1
+    created: "2020-12-13T07:11:10.0493953Z"
+    description: Prometheus is a monitoring system and time series database.
+    digest: 53fcb4d2dbc4f79b65c8efb41e3ee4fae0213fb0c39fb97f7dc5e978e13cc3e9
+    home: https://prometheus.io/
+    icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
+    name: prometheus
+    sources:
+    - https://github.com/prometheus/alertmanager
+    - https://github.com/prometheus/prometheus
+    - https://github.com/prometheus/pushgateway
+    - https://github.com/prometheus/node_exporter
+    - https://github.com/kubernetes/kube-state-metrics
+    urls:
+    - https://github.com/clouddrove/helmcharts/releases/download/prometheus-9.5.3/prometheus-9.5.3.tgz
+    version: 9.5.3
 generated: "2020-12-12T18:32:16.707281903Z"
