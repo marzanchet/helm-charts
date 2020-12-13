@@ -1,10 +1,9 @@
 
 ```sh
 module "prometheus" {
-source = "git@github.com:clouddrove/terraform-kubernetes-kubewatch.git"
+source = "git@github.com:clouddrove/terraform-monitoring-prometheus.git"
 
   secretName = ""
-  secretPath = ""
   kubernetesendpoint = ""
 
   namespace = ""
