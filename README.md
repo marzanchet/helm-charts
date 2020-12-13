@@ -1,4 +1,4 @@
-## Helm Charts for Kubernetes.
+## Helm Charts for Kubernetes
 
 ## How do you install the charts in this Repo?
 
