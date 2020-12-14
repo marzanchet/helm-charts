@@ -578,6 +578,62 @@ serverFiles:
         annotations:
           summary: Kubernetes out of capacity {{ $labels.instance }} .
           description: Kubernetes out of capacity {{ $labels.node }} is out of capacity  {{ $value }} .
+      - alert: NodeOutOfMemory_<_50
+        expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100 < 50 and node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100 > 30
+        for: 1m
+        labels:
+          severity: WARNING
+        annotations:
+          summary: node Out of memmory available ( < 50%) {{ $labels.instance }} .
+          description: Kubernetes out of capacity {{ $labels.node }} is out of capacity  {{ $value }} .
+      - alert: NodeOutOfMemory_<_30
+        expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100 < 30
+        for: 1m
+        labels:
+          severity: CRITICAL
+        annotations:
+          summary: node Out of memmory available ( < 30%) {{ $labels.instance }} .
+          description:  node Out of memmory available ( < 30%) {{ $labels.node }} is out of capacity  {{ $value }} .
+      - alert: NodeOOMKilled
+        expr: increase(node_vmstat_oom_kill[5m]) > 0
+        for: 1m
+        labels:
+          severity: CRITICAL
+        annotations:
+          summary: Host OOM kill detected {{ $labels.instance }} .
+          description: Host OOM kill detected {{ $labels.node }} is out of capacity  {{ $value }} .
+      - alert: NodeCPULoad_>_50
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 50 and 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) < 70
+        for: 1m
+        labels:
+          severity: WARNING
+        annotations:
+          summary: Node CPU usage (> 50%) {{ $labels.instance }} .
+          description: Node CPU usage (> 50%)  {{ $labels.node }} is out of capacity  {{ $value }} .
+      - alert: NodeCPULoad_>_70
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 70
+        for: 1m
+        labels:
+          severity: CRITICAL
+        annotations:
+          summary: Node CPU usage (> 70%) {{ $labels.instance }} .
+          description: Node CPU usage (> 70%)  {{ $labels.node }} is out of capacity  {{ $value }} .
+      - alert: NodeNetworkIN
+        expr: sum by (instance) (rate(node_network_receive_bytes_total[2m])) / 1024 / 1024 > 100
+        for: 1m
+        labels:
+          severity: WARNING
+        annotations:
+          summary: Node high network receive  {{ $labels.instance }} .
+          description: Node high network receive {{ $labels.node }} is out of capacity  {{ $value }} .
+      - alert: NodeNetworkOUT
+        expr: sum by (instance) (rate(node_network_transmit_bytes_total[2m])) / 1024 / 1024 > 100
+        for: 1m
+        labels:
+          severity: WARNING
+        annotations:
+          summary: Node high network transmit  {{ $labels.instance }} .
+          description: Node high network transmit {{ $labels.node }} is out of capacity  {{ $value }} .
     - name: kubernetes-jobs.rules
       rules:
       - alert: KubernetesJobFailed
@@ -630,7 +686,38 @@ serverFiles:
         annotations:
           summary: Kubernetes PersistentVolume error {{ $labels.instance }} .
           description: Persistent volume is in bad state  {{ $value }} .
-
+      - alert: DiskReadBytesRate
+        expr: sum by (instance) (rate(node_disk_read_bytes_total[2m])) / 1024 / 1024 > 70
+        for: 1m
+        labels:
+          severity: WARNING
+        annotations:
+          summary: Host unusual disk read rate {{ $labels.instance }} .
+          description: Host unusual disk read rate  {{ $value }} .
+      - alert: DiskWriteBytesRate
+        expr: sum by (instance) (rate(node_disk_written_bytes_total[2m])) / 1024 / 1024 > 70
+        for: 1m
+        labels:
+          severity: WARNING
+        annotations:
+          summary: Host unusual disk write rate {{ $labels.instance }} .
+          description: Host unusual disk write rate  {{ $value }} .
+      - alert: DiskSpaceAvailable_<_50
+        expr: (node_filesystem_avail_bytes * 100) / node_filesystem_size_bytes < 50 and (node_filesystem_avail_bytes * 100) / node_filesystem_size_bytes > 30
+        for: 1m
+        labels:
+          severity: WARNING
+        annotations:
+          summary: Disk full (< 50% left) {{ $labels.instance }} .
+          description: Disk is almost full (< 50% left)  {{ $value }} .
+      - alert: DiskSpaceAvailable_<_30
+        expr: (node_filesystem_avail_bytes * 100) / node_filesystem_size_bytes < 30
+        for: 1m
+        labels:
+          severity: CRITICAL
+        annotations:
+          summary: Disk full (< 30% left) {{ $labels.instance }} .
+          description: Disk is almost full (< 30% left)  {{ $value }} .
 ################################################### Application Alerts ##############################
   applications-alerts.yml:
     groups:
@@ -645,7 +732,7 @@ serverFiles:
           summary: Kubernetes Pod not healthy (instance {{ $labels.pod }})
           description: Pod :- {{$labels.namespace}}/{{$labels.pod}} has been in a non-ready state for longer than an hour.\n
       - alert: ServicePodCrashLooping
-        expr: rate(kube_pod_container_status_restarts_total[15m]) * 60 * 5 > 5
+        expr: rate(kube_pod_container_status_restarts_total[5m]) * 60 * 5 > 5
         for: 1m
         labels:
           severity: WARNING
@@ -686,7 +773,46 @@ serverFiles:
         annotations:
           description: Pods Terminated {{ $labels.namespace }}/{{ $labels.container }}/{{ $labels.pod }} with reason {{ $labels.reason }} .
           summary: Service Terminated
-
+      - alert: ServiceCPUUsage_>_50
+        expr: (sum(rate(container_cpu_usage_seconds_total{container!="POD"}[5m])) BY (container, namespace,pod) * 100) > 50 and (sum(rate(container_cpu_usage_seconds_total{container!="POD"}[5m])) BY (container, namespace,pod) * 100) < 70
+        for: 1m
+        labels:
+          severity: WARNING
+        annotations:
+          description: Service Pods High CPU Usage {{ $labels.namespace }}/{{ $labels.pod }} ServiceName {{ $labels.container }} .
+          summary: Service Pods High CPU Usage.
+      - alert: ServiceCPUUsage_>_70
+        expr: sum (rate (container_cpu_usage_seconds_total{container!="POD"}[5m])) by (container,pod,instance,namespace)  / sum(kube_pod_container_resource_limits{resource="cpu"}) by (container,pod,instance,namespace) * 100 > 70
+        for: 1m
+        labels:
+          severity: CRITICAL
+        annotations:
+          description: Service Pods High CPU Usage {{ $labels.namespace }}/{{ $labels.pod }} ServiceName {{ $labels.container }} .
+          summary: Service Pods High CPU Usage.
+      - alert: ServiceMemoryUsage_>_50
+        expr: (sum(container_memory_working_set_bytes{container!="POD"}) BY (container,pod,instance,namespace) / sum(container_spec_memory_limit_bytes{container!="POD"} > 0) BY (container,pod,instance,namespace) * 100) > 50 and (sum(container_memory_working_set_bytes{container!="POD"}) BY (container,pod,instance,namespace) / sum(container_spec_memory_limit_bytes{container!="POD"} > 0) BY (container,pod,instance,namespace) * 100) < 70
+        for: 1m
+        labels:
+          severity: WARNING
+        annotations:
+          description: Service Pods High Memory Usage {{ $labels.namespace }}/{{ $labels.pod }} ServiceName {{ $labels.container }} .
+          summary: Service Pods High memory Usage.
+      - alert: ServiceMemoryUsage_>_70
+        expr: (sum(container_memory_working_set_bytes{container!="POD"}) BY (container,pod,instance,namespace) / sum(container_spec_memory_limit_bytes{container!="POD"} > 0) BY (container,pod,instance,namespace) * 100) > 50
+        for: 1m
+        labels:
+          severity: CRITICAL
+        annotations:
+          description: Service Pods High Memory Usage {{ $labels.namespace }}/{{ $labels.pod }} ServiceName {{ $labels.container }} .
+          summary: Service Pods High Memory Usage.
+      - alert: Servicethrottled
+        expr: rate(container_cpu_cfs_throttled_seconds_total[3m]) > 1
+        for: 1m
+        labels:
+          severity: CRITICAL
+        annotations:
+          description: Container is being throttled {{ $labels.namespace }}/{{ $labels.pod }} ServiceName {{ $labels.container }} .
+          summary: Container is being throttled.
 ################################################## Database Alerts #################################
   database-alerts.yml:
     groups:
