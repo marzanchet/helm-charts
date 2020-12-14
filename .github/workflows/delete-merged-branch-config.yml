@@ -1,0 +1,3 @@
+exclude: 
+  - gh-pages
+delete_closed_pr: true
