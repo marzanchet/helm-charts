@@ -31,6 +31,33 @@ entries:
     urls:
     - https://github.com/clouddrove/helmcharts/releases/download/cadvisor-0.1.1/cadvisor-0.1.1.tgz
     version: 0.1.1
+  kubewatch:
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 0.1.0
+    created: "2020-12-14T15:33:21.677099203Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Kubewatch is a Kubernetes watcher that currently publishes notification to Slack.
+    digest: b0dba006337df56baf1b0d1d6cec4dbfdec0f03005eed0c881a26925fe40ec1a
+    home: https://github.com/bitnami/charts/tree/master/bitnami/kubewatch
+    icon: https://bitnami.com/assets/stacks/kubewatch/img/kubewatch-stack-220x234.png
+    keywords:
+    - kubernetes
+    - slack
+    - hipchat
+    - mattermost
+    - flock
+    - msteams
+    name: kubewatch
+    urls:
+    - https://github.com/clouddrove/helmcharts/releases/download/kubewatch-0.1.1/kubewatch-0.1.1.tgz
+    version: 0.1.1
   metrics-server:
   - apiVersion: v2
     appVersion: 1.16.1
