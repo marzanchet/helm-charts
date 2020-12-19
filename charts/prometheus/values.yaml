@@ -1,3 +1,4 @@
+###### Global ####
 kubernetesendpoint:
 secretName:
 ######################## RBAC for prometheus #################################
@@ -11,19 +12,19 @@ imagePullSecrets:
 serviceAccounts:
   alertmanager:
     create: false
-    name:
+    name: ""
   kubeStateMetrics:
     create: false
-    name:
+    name: ""
   nodeExporter:
     create: false
-    name:
+    name: ""
   pushgateway:
     create: false
-    name:
+    name: ""
   server:
     create: false
-    name:
+    name: ""
 
 ################################# Prometheus AlertManager #######################
 
@@ -32,7 +33,7 @@ alertmanager:
   name: alertmanager
   image:
     repository: prom/alertmanager
-    tag: v0.18.0
+    tag: v0.20.0
     pullPolicy: IfNotPresent
   priorityClassName: ""
   extraArgs: {}
@@ -51,11 +52,10 @@ alertmanager:
   ingress:
     enabled: true
     annotations:
-      kubernetes.io/ingress.class: nginx 
+      kubernetes.io/ingress.class: nginx
       #kubernetes.io/ingress.class: azure/application-gateway
-      #kubernetes.io/tls-acme: 'true'
-      #nginx.ingress.kubernetes.io/force-ssl-redirect: true
-      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+#      nginx.ingress.kubernetes.io/ssl-redirect: "true"
     extraLabels: {}
     hosts: []
     #   - alertmanager.domain.com
@@ -65,10 +65,10 @@ alertmanager:
     #   backend:
     #     serviceName: ssl-redirect
     #     servicePort: use-annotation
-    tls:
-      - secretName: default-ingress-tls
-        hosts:
-           - alertmanager.domain.com
+    tls: []
+      # - secretName: default-ingress-tls
+      #   hosts:
+      #      - alertmanager.domain.com
   # strategy:
   #   type: Recreate
   tolerations: []
@@ -101,12 +101,12 @@ alertmanager:
       labels: {}
       servicePort: 80
   resources: {}
-    #  limits:
-    #    cpu: 1
-    #    memory: {}
-    #  requests:
-    #    cpu: {}
-    #    memory: {}
+  #    limits:
+  #      cpu: {}
+  #      memory: {}
+  #    requests:
+  #      cpu: {}
+  #      memory: {}
   securityContext:
     runAsUser: 65534
     runAsNonRoot: true
@@ -140,7 +140,7 @@ configmapReload:
   resources: {}
 ################################# Prometheus Kubestate metrics ##############
 kubeStateMetrics:
-  enabled: true
+  enabled: false
   name: kube-state-metrics
   image:
     repository: quay.io/coreos/kube-state-metrics
@@ -154,9 +154,9 @@ kubeStateMetrics:
     #   value: "value"
     #   effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
   nodeSelector: {}
-  podAnnotations: 
+  podAnnotations:
     prometheus.io/scrape: 'true'
-    prometheus.io/port: '8080'    
+    prometheus.io/port: '8080'
   podSecurityPolicy:
     annotations: {}
       # seccomp.security.alpha.kubernetes.io/allowedProfileNames: '*'
@@ -167,11 +167,11 @@ kubeStateMetrics:
   replicaCount: 1
   resources: {}
     #  limits:
-    #    cpu: {}
-    #    memory: {}
+    #    cpu: 
+    #    memory: 
     #  requests:
-    #    cpu: {}
-    #    memory: {}
+    #    cpu: 
+    #    memory: 
   securityContext:
     runAsUser: 65534
     runAsNonRoot: true
@@ -187,7 +187,7 @@ kubeStateMetrics:
     type: ClusterIP
 ################################ Prometheus NodeExporter #########################################
 nodeExporter:
-  enabled: true
+  enabled: false
   hostNetwork: true
   hostPID: true
   name: node-exporter
@@ -221,19 +221,19 @@ nodeExporter:
     #   value: "value"
     #   effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
   nodeSelector: {}
-  podAnnotations: 
+  podAnnotations:
     prometheus.io/scrape: 'true'
     prometheus.io/port: '9100'
- 
+
   pod:
     labels: {}
   resources: {}
-    #  limits:
-    #    cpu: {}
-    #    memory: {}
-    #  requests:
-    #    cpu: {}
-    #    memory: {}
+  #    limits:
+  #      cpu: {}
+  #      memory: {}
+  #    requests:
+  #      cpu: {}
+  #      memory: {}
   securityContext: {}
     # runAsUser: 0
   service:
@@ -254,7 +254,7 @@ server:
   sidecarContainers:
   image:
     repository: prom/prometheus
-    tag: v2.13.1
+    tag: v2.22.0
     pullPolicy: IfNotPresent
   priorityClassName: ""
   prefixURL: ""
@@ -308,10 +308,10 @@ server:
   configMapOverrideName: ""
   ingress:
     enabled: true
-    annotations: 
+    annotations:
     #kubernetes.io/ingress.class: azure/application-gateway
        kubernetes.io/ingress.class: nginx
-       nginx.ingress.kubernetes.io/ssl-redirect: "true"
+       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     extraLabels: {}
     hosts: []
     #   - prometheus.domain.com
@@ -321,10 +321,10 @@ server:
     #   backend:
     #     serviceName: ssl-redirect
     #     servicePort: use-annotation
-    tls:
-       - secretName: prometheus-server-tls
-         hosts:
-           - prometheus.domain.com
+    tls: []
+    #   - secretName: prometheus-server-tls
+    #     hosts:
+    #       - prometheus.domain.com
 
   ## Server Deployment Strategy type
   # strategy:
@@ -371,13 +371,13 @@ server:
   readinessProbeTimeout: 30
   livenessProbeInitialDelay: 30
   livenessProbeTimeout: 30
-  resources: {}
-    #  limits:
-    #    cpu: {}
-    #    memory: {}
-    #  requests:
-    #    cpu: {}
-    #    memory: {}
+  resources: 
+     limits:
+       cpu: "2"
+       memory: "3092Mi"
+     requests:
+       cpu: "1"
+       memory: "2048Mi"
   securityContext:
     runAsUser: 65534
     runAsNonRoot: true
@@ -397,7 +397,7 @@ server:
   retention: "15d"
 ########################################## Prometheus PushGateway #########################
 pushgateway:
-  enabled: true
+  enabled: false
   # schedulerName:
   name: pushgateway
   image:
@@ -408,9 +408,9 @@ pushgateway:
   extraArgs: {}
   ingress:
     enabled: false
-    annotations: 
+    annotations:
         # kubernetes.io/ingress.class: nginx
-        kubernetes.io/ingress.class: azure/application-gateway
+        kubernetes.io/ingress.class: nginx
     hosts: []
     #   - pushgateway.domain.com
     #   - domain.com/pushgateway
@@ -437,12 +437,12 @@ pushgateway:
       # apparmor.security.beta.kubernetes.io/defaultProfileName: 'runtime/default'
   replicaCount: 1
   resources: {}
-    #  limits:
-    #    cpu: {}
-    #    memory: {}
-    #  requests:
-    #    cpu: {}
-    #    memory: {}
+  #    limits:
+  #      cpu: {}
+  #      memory: {}
+  #    requests:
+  #      cpu: {}
+  #      memory: {}
   securityContext:
     runAsUser: 65534
     runAsNonRoot: true
@@ -473,19 +473,39 @@ pushgateway:
 ## alertmanager ConfigMap entries
 ########################################################################################
 alertmanagerFiles:
+  alertmanager.yml:
     global:
-        resolve_timeout: 5m
-        smtp_require_tls: true
-        smtp_from: 'sendermail@gmail.com'  #verified on sendgrid
-        smtp_smarthost: 'smtp.sendgrid.net:587'
-        smtp_auth_username: 'apikey'
-        smtp_auth_password: 'authpassword'           
-    mail_to: testmail@gmail.com
-    source: Prometheus-Dev
-    sac: 123456
-    production: no
-    context: dev
-    project: PROJECTNAME           
+      smtp_smarthost: smtp_host
+      smtp_from: smtp_from
+      smtp_require_tls: false
+      smtp_auth_username: smtp_username
+      smtp_auth_password: smtp_password
+      # slack_api_url: ''
+    receivers:
+      - name: default-receiver
+        email_configs:
+        - to: 'abc@gmail.com'
+      - name: Devops-Email-Group
+        email_configs:
+        - to: 'abc@gmail.com'
+      - name: QA-Email-Group
+        email_configs:
+        - to: 'abc@gmail.com'
+    route:
+      group_wait: 10s
+      group_interval: 5m
+      group_by: ['alertname', 'cluster', 'service' , 'kubernetes_namespace' , 'namespace']
+      receiver: default-receiver
+      repeat_interval: 3h
+      routes:
+      - match_re:
+          alertname: MysqlDown|MysqlTooManyConnections|MysqlHighThreadsRunning|MysqlSlowQueries|MysqlRestarted|ServiceNotUpdated|ServiceDown|ServiceFrequentlyRestarting|ServicePodNotHealthy|ServicePodCrashLooping|NodeNotReady|NodeMemoryPressure|NodeDiskPressure|NodeOutOfDisk|NodeOutOfCapacity|PersistentvolumeclaimPending|VolumeOutOfDiskSpace|VolumeFullInFourDays|PersistentvolumeError
+        receiver: Devops-Email-Group
+        continue: true
+      - match_re:
+          alertname: MysqlDown|MysqlTooManyConnections|MysqlHighThreadsRunning|MysqlSlowQueries|MysqlRestarted|ServiceNotUpdated|ServiceDown|ServiceFrequentlyRestarting|ServicePodNotHealthy|ServicePodCrashLooping|NodeNotReady|NodeMemoryPressure|NodeDiskPressure|NodeOutOfDisk|NodeOutOfCapacity|PersistentvolumeclaimPending|VolumeOutOfDiskSpace|VolumeFullInFourDays|PersistentvolumeError
+        receiver: QA-Email-Group
+        continue: true
 ##################################################### Prometheus Rules ######################
 serverFiles:
   infrastructure-alerts.yml:
@@ -785,40 +805,40 @@ serverFiles:
           description: Pods Terminated {{ $labels.namespace }}/{{ $labels.container }}/{{ $labels.pod }} with reason {{ $labels.reason }} .
           summary: Service Terminated
       - alert: ServiceCPUUsage_>_50
-        expr: (sum(rate(container_cpu_usage_seconds_total{container!="POD",container!=""}[5m])) BY (instance,namespace,pod) * 100) > 50 and (sum(rate(container_cpu_usage_seconds_total{container!="POD",container!=""}[5m])) BY (instance,namespace,pod) * 100) < 70
+        expr: (sum(rate(container_cpu_usage_seconds_total{container!="POD",container!=""}[5m])) BY (instance,namespace,pod) * 100) > 50 and (sum(rate(container_cpu_usage_seconds_total{container!="POD",container!=""}[5m])) BY (container, namespace,pod) * 100) < 70
         for: 1m
         labels:
           severity: WARNING
           service_type: Container
         annotations:
-          description: Service Pods High CPU Usage {{ $labels.namespace }}/{{ $labels.pod }} instance {{ $labels.instance }} .
+          description: Service Pods High CPU Usage {{ $labels.namespace }}/{{ $labels.pod }} ServiceName {{ $labels.container }} .
           summary: Service Pods High CPU Usage.
       - alert: ServiceCPUUsage_>_70
-        expr: (sum(rate(container_cpu_usage_seconds_total{container!="POD",container!=""}[5m])) BY (instance,namespace,pod) * 100) > 70
+        expr: (sum(rate(container_cpu_usage_seconds_total{container!="POD",container!=""}[5m])) BY (instance,namespace,pod) * 100) < 70
         for: 1m
         labels:
           severity: CRITICAL
           service_type: Container
         annotations:
-          description: Service Pods High CPU Usage {{ $labels.namespace }}/{{ $labels.pod }} instance {{ $labels.instance }} .
+          description: Service Pods High CPU Usage {{ $labels.namespace }}/{{ $labels.pod }} ServiceName {{ $labels.container }} .
           summary: Service Pods High CPU Usage.
       - alert: ServiceMemoryUsage_>_50
-        expr: (sum(container_memory_working_set_bytes{container!="POD",container!=""}) BY (pod,instance,namespace) / sum(container_spec_memory_limit_bytes{container!="POD",container!=""} > 0) BY (pod,instance,namespace) * 100) > 50 and (sum(container_memory_working_set_bytes{container!="POD",container!=""}) BY (pod,instance,namespace) / sum(container_spec_memory_limit_bytes{container!="POD",container!=""} > 0) BY (pod,instance,namespace) * 100) < 70
+        expr: (sum(container_memory_working_set_bytes{container!="POD",container!=""}) BY (pod,instance,namespace) / sum(container_spec_memory_limit_bytes{container!="POD",container!=""} > 0) BY (pod,instance,namespace) * 100) > 50 and (sum(container_memory_working_set_bytes{container!="POD",container!=""}) BY (pod,instance,namespace) / sum(container_spec_memory_limit_bytes{container!="POD",container!=""} > 0) BY (container,pod,instance,namespace) * 100) < 70
         for: 1m
         labels:
           severity: WARNING
           service_type: Container
         annotations:
-          description: Service Pods High Memory Usage {{ $labels.namespace }}/{{ $labels.pod }} instance {{ $labels.instance }} ..
-          summary: Service Pods High memory Usage {{ $labels.namespace }}/{{ $labels.pod }}.
+          description: Service Pods High Memory Usage {{ $labels.namespace }}/{{ $labels.pod }} ServiceName {{ $labels.container }} .
+          summary: Service Pods High memory Usage.
       - alert: ServiceMemoryUsage_>_70
-        expr: (sum(container_memory_working_set_bytes{container!="POD",container!=""}) BY (pod,instance,namespace) / sum(container_spec_memory_limit_bytes{container!="POD",container!=""} > 0) BY (pod,instance,namespace) * 100) > 70
+        expr: (sum(container_memory_working_set_bytes{container!="POD",container!=""}) BY (pod,instance,namespace) / sum(container_spec_memory_limit_bytes{container!="POD",container!=""} > 0) BY (pod,instance,namespace) * 100) > 50
         for: 1m
         labels:
           severity: CRITICAL
           service_type: Container
         annotations:
-          description: Service Pods High Memory Usage {{ $labels.namespace }}/{{ $labels.pod }} instance {{ $labels.instance }} .
+          description: Service Pods High Memory Usage {{ $labels.namespace }}/{{ $labels.pod }} ServiceName {{ $labels.container }} .
           summary: Service Pods High Memory Usage.
       - alert: Servicethrottled
         expr: rate(container_cpu_cfs_throttled_seconds_total{container!=""}[3m]) > 1
@@ -827,7 +847,7 @@ serverFiles:
           severity: CRITICAL
           service_type: Container
         annotations:
-          description: Container is being throttled {{ $labels.namespace }}/{{ $labels.pod }} instance {{ $labels.instance }} .
+          description: Container is being throttled {{ $labels.namespace }}/{{ $labels.pod }} ServiceName {{ $labels.container }} .
           summary: Container is being throttled.
 
 ################################################## Database Alerts #################################
@@ -875,10 +895,10 @@ serverFiles:
         annotations:
           summary: MySQL restarted {{ $labels.kubernetes_namespace }} .
           description: MySQL has just been restarted, less than one minute ago on {{ $labels.kubernetes_namespace }} {{ $value }} .	
-  
-########################################################################################################################
-# Prometheus Configuration 
-########################################################################################################################
+
+###################################################################################################################
+# Prometheus Configuration
+###################################################################################################################
 
 networkPolicy:
   ## Enable creation of NetworkPolicy resources.
