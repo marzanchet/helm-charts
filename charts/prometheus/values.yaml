@@ -38,7 +38,7 @@ alertmanager:
   priorityClassName: ""
   extraArgs: {}
   prefixURL: ""
-  baseURL: "/"
+  baseURL: ""
   extraEnv: {}
   extraSecretMounts: []
     # - name: secret-files
@@ -475,7 +475,7 @@ pushgateway:
 alertmanagerFiles:
   alertmanager.yml:
     global:
-      smtp_smarthost: smtp_host
+      smtp_smarthost: smtp.gmail.com:587
       smtp_from: smtp_from
       smtp_require_tls: false
       smtp_auth_username: smtp_username
