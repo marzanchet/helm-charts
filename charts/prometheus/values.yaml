@@ -1,11 +1,5 @@
-namespace:
 kubernetesendpoint:
-project:
-env: 
-subscriptionid:
-tenantid:
-clientid:
-secretid:
+secretName:
 ######################## RBAC for prometheus #################################
 rbac:
   create: true
