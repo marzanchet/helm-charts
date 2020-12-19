@@ -100,13 +100,13 @@ alertmanager:
       annotations: {}
       labels: {}
       servicePort: 80
-  resources: 
-     limits:
-       cpu: {}
-       memory: {}
-     requests:
-       cpu: {}
-       memory: {}
+  resources: {}
+    #  limits:
+    #    cpu: 1
+    #    memory: {}
+    #  requests:
+    #    cpu: {}
+    #    memory: {}
   securityContext:
     runAsUser: 65534
     runAsNonRoot: true
@@ -165,13 +165,13 @@ kubeStateMetrics:
   pod:
     labels: {}
   replicaCount: 1
-  resources: 
-     limits:
-       cpu: {}
-       memory: {}
-     requests:
-       cpu: {}
-       memory: {}
+  resources: {}
+    #  limits:
+    #    cpu: {}
+    #    memory: {}
+    #  requests:
+    #    cpu: {}
+    #    memory: {}
   securityContext:
     runAsUser: 65534
     runAsNonRoot: true
@@ -227,13 +227,13 @@ nodeExporter:
  
   pod:
     labels: {}
-  resources: 
-     limits:
-       cpu: {}
-       memory: {}
-     requests:
-       cpu: {}
-       memory: {}
+  resources: {}
+    #  limits:
+    #    cpu: {}
+    #    memory: {}
+    #  requests:
+    #    cpu: {}
+    #    memory: {}
   securityContext: {}
     # runAsUser: 0
   service:
@@ -371,13 +371,13 @@ server:
   readinessProbeTimeout: 30
   livenessProbeInitialDelay: 30
   livenessProbeTimeout: 30
-  resources: 
-     limits:
-       cpu: {}
-       memory: {}
-     requests:
-       cpu: {}
-       memory: {}
+  resources: {}
+    #  limits:
+    #    cpu: {}
+    #    memory: {}
+    #  requests:
+    #    cpu: {}
+    #    memory: {}
   securityContext:
     runAsUser: 65534
     runAsNonRoot: true
@@ -436,13 +436,13 @@ pushgateway:
       # seccomp.security.alpha.kubernetes.io/defaultProfileName: 'docker/default'
       # apparmor.security.beta.kubernetes.io/defaultProfileName: 'runtime/default'
   replicaCount: 1
-  resources: 
-     limits:
-       cpu: {}
-       memory: {}
-     requests:
-       cpu: {}
-       memory: {}
+  resources: {}
+    #  limits:
+    #    cpu: {}
+    #    memory: {}
+    #  requests:
+    #    cpu: {}
+    #    memory: {}
   securityContext:
     runAsUser: 65534
     runAsNonRoot: true
