@@ -6,6 +6,31 @@ Expand the name of the chart.
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
+{{- define "__source" -}}
+{{ .Values.alertmanagerFiles.source  }}
+{{- end -}}
+
+{{- define "__Recipient" -}}
+{{ .Values.alertmanagerFiles.mail_to }}
+{{- end -}}
+
+{{- define "__SAC" -}}
+{{ .Values.alertmanagerFiles.sac }}
+{{- end -}}
+
+{{- define "__Project" -}}
+{{ .Values.alertmanagerFiles.project }}
+{{- end -}}
+
+{{- define "__Production" -}}
+{{ .Values.alertmanagerFiles.production }}
+{{- end -}}
+
+{{- define "__Context" -}}
+{{ .Values.alertmanagerFiles.context }}
+{{- end -}}
+
+
 {{/*
 Create chart name and version as used by the chart label.
 */}}

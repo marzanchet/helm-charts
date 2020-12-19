@@ -133,5 +133,35 @@ data:
           - source_labels: [__meta_kubernetes_pod_name]
             action: replace
             target_label: kubernetes_pod_name
+      - job_name: 'cassandra-vm-monitoring'
+        azure_sd_configs:
+          - authentication_method: OAuth
+            port: 9100
+            subscription_id: {{ $root.Values.subscriptionid }}
+            tenant_id: {{ $root.Values.tenantid }}
+            client_id: {{ $root.Values.clientid }}
+            client_secret: {{ $root.Values.secretid }}
+            refresh_interval: 10s
+        relabel_configs:
+          - source_labels: [__meta_azure_machine_name]
+            regex: {{ $root.Values.project }}{{ $root.Values.env }}-cassandra.*
+            action: keep
+          - source_labels: [__meta_azure_machine_name]
+            target_label: instance
+      - job_name: 'cassandra-db-monitoring'
+        azure_sd_configs:
+          - authentication_method: OAuth
+            port: 7070
+            subscription_id: {{ $root.Values.subscriptionid }}
+            tenant_id: {{ $root.Values.tenantid }}
+            client_id: {{ $root.Values.clientid }}
+            client_secret: {{ $root.Values.secretid }}
+            refresh_interval: 10s
+        relabel_configs:
+          - source_labels: [__meta_azure_machine_name]
+            regex: {{ $root.Values.project }}{{ $root.Values.env }}-cassandra.*
+            action: keep
+          - source_labels: [__meta_azure_machine_name]
+            target_label: instance
 {{- end }}
 {{- end }}

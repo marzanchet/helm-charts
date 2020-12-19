@@ -1,4 +1,3 @@
-{{- if and .Values.alertmanager.enabled (and (empty .Values.alertmanager.configMapOverrideName) (empty .Values.alertmanager.configFromSecret)) -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -6,9 +5,31 @@ metadata:
     {{- include "prometheus.alertmanager.labels" . | nindent 4 }}
   name: {{ template "prometheus.alertmanager.fullname" . }}
 data:
-{{- $root := . -}}
-{{- range $key, $value := .Values.alertmanagerFiles }}
-  {{ $key }}: |
-{{ toYaml $value | default "{}" | indent 4 }}
-{{- end -}}
-{{- end -}}
+  alertmanager.yml: |
+    global:
+        resolve_timeout: {{ .Values.alertmanagerFiles.global.resolve_timeout }}
+        smtp_require_tls: {{ .Values.alertmanagerFiles.global.smtp_require_tls }}
+        smtp_from: {{ .Values.alertmanagerFiles.global.smtp_from | squote }}
+        smtp_smarthost: {{ .Values.alertmanagerFiles.global.smtp_smarthost | squote }}
+        smtp_auth_username: {{ .Values.alertmanagerFiles.global.smtp_auth_username | squote }}
+        smtp_auth_password: {{ .Values.alertmanagerFiles.global.smtp_auth_password | squote }}            
+    templates:
+        - /etc/config/email/email.tmpl
+    receivers:
+      - name: default-receiver
+        email_configs:
+        - to: {{ .Values.alertmanagerFiles.mail_to | squote }}
+          send_resolved: true
+    route:
+      group_wait: 5s
+      group_interval: 5m
+      group_by: ['alertname', 'cluster', 'service' , 'kubernetes_namespace' , 'namespace']
+      receiver: default-receiver
+      repeat_interval: 3h
+      routes:
+      - match_re:
+          alertname: (.*)
+        receiver: default-receiver
+        continue: true
+
+        
