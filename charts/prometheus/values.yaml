@@ -2,7 +2,7 @@ kubernetesendpoint:
 secretName:
 ######################## RBAC for prometheus #################################
 rbac:
-  create: true
+  create: false
 podSecurityPolicy:
   enabled: false
 
