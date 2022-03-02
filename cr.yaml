@@ -2,5 +2,3 @@
 sign: false
 # UID of the GPG key to use
 key: Chart Releaser Test Key
-charts_url: http://clouddrove.com/helm-charts/
-charts-repo: https://raw.githubusercontent.com/clouddrove/helm-charts/gh-pages
