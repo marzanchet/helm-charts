@@ -19,4 +19,4 @@ name: grafana
 sources:
 - https://github.com/grafana/grafana
 type: application
-version: 6.21.6-istio-compatible
+version: 6.21.7
