@@ -885,7 +885,7 @@ server:
     enabled: false
     virtualservice:
       hosts: 
-      - prometheus.xyz.com
+      - prometheus.prod.deployr.com
 
 
   persistentVolume:
