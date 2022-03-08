@@ -517,35 +517,35 @@ dashboardProviders:
 ##
 ## dashboards per provider, use provider name as key.
 ##
-dashboards: 
-  default:
-  #   some-dashboard:
-  #     json: |
-  #       $RAW_JSON
-    dashboard1:
-      file: dashboards/container-monitoring.json
-    dashboard2:
-      file: dashboards/k8s-cluster-autoscaler.json
-    dashboard3:
-      file: dashboards/k8s-cluster-detail-monitoring.json
-    dashboard4:
-      file: dashboards/k8s-pods.json
-    dashboard5:
-      file: dashboards/Node-monitoring.json
-    dashboard6:
-      file: dashboards/pods-stats.json 
-    dashboard7:
-      file: dashboards/istio/istio-control-plane.json
-    dashboard8:
-      file: dashboards/istio/istio-mesh.json
-    dashboard9:
-      file: dashboards/istio/istio-performance.json
-    dashboard10:
-      file: dashboards/istio/istio-service.json
-    dashboard11:
-      file: dashboards/istio/istio-wasm-extension.json
-    dashboard12:
-      file: dashboards/istio/istio-workload.json
+# dashboards: 
+#   default:
+#   #   some-dashboard:
+#   #     json: |
+#   #       $RAW_JSON
+#     dashboard1:
+#       file: dashboards/container-monitoring.json
+#     dashboard2:
+#       file: dashboards/k8s-cluster-autoscaler.json
+#     dashboard3:
+#       file: dashboards/k8s-cluster-detail-monitoring.json
+#     dashboard4:
+#       file: dashboards/k8s-pods.json
+#     dashboard5:
+#       file: dashboards/Node-monitoring.json
+#     dashboard6:
+#       file: dashboards/pods-stats.json 
+#     dashboard7:
+#       file: dashboards/istio/istio-control-plane.json
+#     dashboard8:
+#       file: dashboards/istio/istio-mesh.json
+#     dashboard9:
+#       file: dashboards/istio/istio-performance.json
+#     dashboard10:
+#       file: dashboards/istio/istio-service.json
+#     dashboard11:
+#       file: dashboards/istio/istio-wasm-extension.json
+#     dashboard12:
+#       file: dashboards/istio/istio-workload.json
   #   prometheus-stats:
   #     gnetId: 2
   #     revision: 2
